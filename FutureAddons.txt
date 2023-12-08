@@ -1,0 +1,3 @@
+1) product table update with no of stocks (update by buyer)
+2) Notify  seller if min stocks avialable
+3) Seller table 
