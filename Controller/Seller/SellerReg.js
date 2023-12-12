@@ -31,43 +31,52 @@ module.exports = {
     const pancardBackImagePath = pancardBackImage.path;
     const companyLogoPath = companyLogo.path;
 
-    const insertQuery = `INSERT INTO seller 
+    bcrypt.hash(password, saltRounds, (hashError, hashedPassword) => {
+      if (hashError) {
+        console.error("Error hashing password:", hashError);
+        return res
+          .status(500)
+          .json({ message: "An error occurred while hashing the password." });
+      }
+
+      const insertQuery = `INSERT INTO seller 
       (name, address, email, password, phonenumber, account_name, acc_no, branch, ifsc_code, 
       company_logo, company_name, gst_no, pancard_front_image, pancard_back_image, aadhaar_no, pincode) 
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
-    connection.query(
-      insertQuery,
-      [
-        name,
-        address,
-        email,
-        password,
-        phonenumber,
-        account_name,
-        acc_no,
-        branch,
-        ifsc_code,
-        companyLogoPath,
-        company_name,
-        gst_no,
-        pancardFrontImagePath,
-        pancardBackImagePath,
-        aadhaar_no,
-        pincode,
-      ],
-      (err, result) => {
-        if (err) {
-          console.error("Error registering seller:", err.message);
-          res.status(500).json({ error: "Internal Server Error" });
-        } else {
-          console.log("Seller registered successfully");
-          res
-            .status(200)
-            .json({ message: "Seller registered successfully", result });
+      connection.query(
+        insertQuery,
+        [
+          name,
+          address,
+          email,
+          password,
+          phonenumber,
+          account_name,
+          acc_no,
+          branch,
+          ifsc_code,
+          companyLogoPath,
+          company_name,
+          gst_no,
+          pancardFrontImagePath,
+          pancardBackImagePath,
+          aadhaar_no,
+          pincode,
+        ],
+        (err, result) => {
+          if (err) {
+            console.error("Error registering seller:", err.message);
+            res.status(500).json({ error: "Internal Server Error" });
+          } else {
+            console.log("Seller registered successfully");
+            res
+              .status(200)
+              .json({ message: "Seller registered successfully", result });
+          }
         }
-      }
-    );
+      );
+    });
   },
 
   // Get all sellers
@@ -165,7 +174,11 @@ module.exports = {
       const companyLogoPath = companyLogo.path;
 
       updateFields = `pancard_front_image = ?, pancard_back_image = ?, company_logo = ?, `;
-      updateValues.unshift(pancardFrontImagePath, pancardBackImagePath, companyLogoPath);
+      updateValues.unshift(
+        pancardFrontImagePath,
+        pancardBackImagePath,
+        companyLogoPath
+      );
     }
 
     const updateQuery = `UPDATE seller SET 
