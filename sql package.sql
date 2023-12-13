@@ -1,8 +1,7 @@
 use monyapp;
 
--- Member Table
 CREATE TABLE member (
-    memb_id INT PRIMARY KEY,
+    memb_id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     address VARCHAR(255),
     email VARCHAR(255) UNIQUE NOT NULL,
@@ -12,15 +11,14 @@ CREATE TABLE member (
     acc_no VARCHAR(20),
     branch VARCHAR(255),
     ifsc_code VARCHAR(20),
-     pancard_front_image VARCHAR(255),
+    pancard_front_image VARCHAR(255),
     pancard_back_image VARCHAR(255),
     aadhaar_no VARCHAR(20),
-    pincode VARCHAR(10)
+    pincode VARCHAR(10),
+    pancard_front_image_path VARCHAR(255),
+    pancard_back_image_path VARCHAR(255)
 );
 
-ALTER TABLE member
-ADD COLUMN pancard_front_image_path VARCHAR(255),
-ADD COLUMN pancard_back_image_path VARCHAR(255);
 
 
 -- Seller Table
