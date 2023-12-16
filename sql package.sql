@@ -76,4 +76,9 @@ CREATE TABLE `order` (
     FOREIGN KEY (seller_id) REFERENCES seller(seller_id),
     FOREIGN KEY (product_id) REFERENCES product(product_id)
 );
+ALTER TABLE product
+ADD COLUMN commission_rate DECIMAL(5, 2) NOT NULL DEFAULT 0.00;
 
+
+ALTER TABLE `order`
+ADD COLUMN commission_amount DECIMAL(10, 2) NOT NULL DEFAULT 0.00;
