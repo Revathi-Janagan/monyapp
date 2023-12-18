@@ -1,4 +1,4 @@
-const connection = require("../../Helper/db"); // Import your database connection
+const connection = require("../../Helper/db"); 
 
 const referralController = {
   refProduct: async (req, res) => {
