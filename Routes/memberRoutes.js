@@ -7,10 +7,10 @@ const upload = require("../Config/multerConfig");
 
 router.post(
   "/regMemb",
-//   upload.createMulterInstance("members").fields([
-//     { name: "pancardFrontImage", maxCount: 1 },
-//     { name: "pancardBackImage", maxCount: 1 },
-//   ]),
+  //   upload.createMulterInstance("members").fields([
+  //     { name: "pancardFrontImage", maxCount: 1 },
+  //     { name: "pancardBackImage", maxCount: 1 },
+  //   ]),
   MemberReg.regMemb
 );
 router.get("/getAllMemb", MemberReg.getAllMemb);

@@ -5,6 +5,8 @@ const memberRoutes = require("./memberRoutes");
 const sellerRoutes = require("./sellerRoutes");
 const productRoutes = require("./productRoutes");
 
+const userRoutes = require("./")
+
 
 router.use("/member",memberRoutes);
 router.use("/sellers",sellerRoutes);

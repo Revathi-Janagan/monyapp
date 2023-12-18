@@ -1,4 +1,4 @@
-const connection = require('../../Helper/db'); // Import your database connection
+const connection = require("../../Helper/db"); // Import your database connection
 
 const referralController = {
   refProduct: async (req, res) => {
@@ -15,12 +15,17 @@ const referralController = {
         const rateResult = await getCommissionRate(order_id);
 
         if (rateResult.length === 0) {
-          res.status(404).json({ error: "Order not found or no commission rate set." });
+          res
+            .status(404)
+            .json({ error: "Order not found or no commission rate set." });
           return;
         }
 
         const commissionRate = rateResult[0].commission_rate;
-        const commissionAmount = await calculateCommission(product_id, quantity);
+        const commissionAmount = await calculateCommission(
+          product_id,
+          quantity
+        );
 
         totalCommission += commissionAmount;
       }
@@ -33,7 +38,7 @@ const referralController = {
       console.error("Error in referralController:", error.message);
       res.status(500).json({ error: "Internal Server Error" });
     }
-  }
+  },
 };
 
 async function getCommissionRate(order_id) {
@@ -54,7 +59,9 @@ async function calculateCommission(product_id, quantity) {
       WHERE product_id = ?;
     `;
 
-    const productResult = await connection.query(getProductDetailsQuery, [product_id]);
+    const productResult = await connection.query(getProductDetailsQuery, [
+      product_id,
+    ]);
 
     if (productResult.length === 0) {
       throw new Error("Product not found");
