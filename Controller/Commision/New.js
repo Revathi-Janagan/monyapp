@@ -21,7 +21,7 @@ const referralController = {
           return;
         }
 
-        const commissionRate = rateResult[0].commission_rate;
+        // const commissionRate = rateResult[0].commission_rate;
         const commissionAmount = await calculateCommission(
           product_id,
           quantity

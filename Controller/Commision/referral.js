@@ -1,4 +1,4 @@
-const connection = require("../../Helper/db"); 
+const connection = require("../../Helper/db");
 
 const referralController = {
   refProduct: async (req, res) => {
@@ -8,12 +8,9 @@ const referralController = {
 
     try {
       let totalCommission = 0;
-
       for (const order of orders) {
         const { order_id, product_id, quantity } = order;
-
         const rateResult = await getCommissionRate(order_id);
-
         if (rateResult.length === 0) {
           res
             .status(404)
