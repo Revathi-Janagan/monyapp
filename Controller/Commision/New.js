@@ -91,9 +91,11 @@ async function calculateCommission(product_id, quantity) {
 // Function to update earnings for a member today
 async function updateEarningsToday(memb_id, totalCommission) {
   const updateEarningsTodayQuery = `
-    INSERT INTO earnings (memb_id, date, amount)
+    INSERT INTO earnings (memb_id, date, todays_earnings)
     VALUES (?, CURDATE(), ?)
-    ON DUPLICATE KEY UPDATE amount = amount + VALUES(amount);
+    ON DUPLICATE KEY UPDATE
+        todays_earnings = todays_earnings + VALUES(todays_earnings),
+        total_earnings = total_earnings + VALUES(todays_earnings);    
   `;
 
   await connection.query(updateEarningsTodayQuery, [memb_id, totalCommission]);
