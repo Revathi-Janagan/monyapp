@@ -5,74 +5,61 @@ const jwt = require("jsonwebtoken");
 
 module.exports = {
   // Create a new member
-  regMemb: (req, res) => {
+  regMemb: async (req, res) => {
     console.log("Inside Register as Member!!!");
 
-    const {
-      name,
-      address,
-      email,
-      password,
-      phonenumber,
-      account_name,
-      acc_no,
-      branch,
-      ifsc_code,
-      aadhaar_no,
-      pincode,
-    } = req.body;
+    try {
+      const {
+        name,
+        address,
+        email,
+        password,
+        phonenumber,
+        account_name,
+        acc_no,
+        branch,
+        ifsc_code,
+        pancard_no,
+        aadhaar_no,
+        pincode,
+        parent_id, // Assuming this is provided by your genealogy tree logic
+      } = req.body;
 
-    // Access uploaded files via req.files
-    const pancardFrontImage = req.files["pancardFrontImage"][0];
-    const pancardBackImage = req.files["pancardBackImage"][0];
+      // Hash the password
+      const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-    // Store the file paths in the database or perform other operations
-    const pancardFrontImagePath = pancardFrontImage.path;
-    const pancardBackImagePath = pancardBackImage.path;
-    
-    bcrypt.hash(password, saltRounds, (hashError, hashedPassword) => {
-      if (hashError) {
-        console.error("Error hashing password:", hashError);
-        return res
-          .status(500)
-          .json({ message: "An error occurred while hashing the password." });
-      }
+      // Insert the new member into the member table
+      const insertQuery = `
+        INSERT INTO member 
+        (name, address, email, password, phonenumber, account_name, acc_no, branch, ifsc_code, pancard_no, aadhaar_no, pincode, parent_id) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `;
 
-      const insertQuery = `INSERT INTO member 
-      (name, address, email, password, phonenumber, account_name, acc_no, branch, ifsc_code, 
-      pancard_front_image, pancard_back_image, aadhaar_no, pincode) 
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+      const result = await connection.query(insertQuery, [
+        name,
+        address,
+        email,
+        hashedPassword,
+        phonenumber,
+        account_name,
+        acc_no,
+        branch,
+        ifsc_code,
+        pancard_no,
+        aadhaar_no,
+        pincode,
+        parent_id,
+      ]);
 
-      connection.query(
-        insertQuery,
-        [
-          name,
-          address,
-          email,
-          hashedPassword,
-          phonenumber,
-          account_name,
-          acc_no,
-          branch,
-          ifsc_code,
-          pancardFrontImagePath,
-          pancardBackImagePath,
-          aadhaar_no,
-          pincode,
-        ],
-        (err, result) => {
-          if (err) {
-            console.error("Error registering member:", err.message);
-            res.status(500).json({ error: "Internal Server Error" });
-          } else {
-            console.log("Member registered successfully");
-            res
-              .status(200)
-              .json({ message: "Member registered successfully", result });
-          }
-        }
-      );
-    });
+      console.log("Member registered successfully");
+      res.status(200).json({
+        message: "Member registered successfully",
+        result,
+      });
+    } catch (error) {
+      console.error("Error registering member:", error.message);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
   },
 
   // Get all members
