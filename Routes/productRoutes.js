@@ -11,7 +11,7 @@ router.post("/createProduct", upload.createMulterInstance("products").fields([
 
 router.get("/getAllProducts", ProductController.getAllProducts);
 
-router.get("/getProductById/:id", ProductController.getProductById);
+router.get("/getProductByProductId/:id", ProductController.getProductByProductId);
 
 router.put("/updateProductWithVideoById/:id", upload.createMulterInstance("products").fields([
   { name: 'product_images', maxCount: 15 }, // Assuming product_images is an array of images

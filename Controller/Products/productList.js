@@ -62,7 +62,7 @@ module.exports = {
   },
 
   // Get a product by ID
-  getProductById: (req, res) => {
+  getProductByProductId: (req, res) => {
     console.log("Inside Get Product By Id!!!");
 
     const productId = req.params.id;

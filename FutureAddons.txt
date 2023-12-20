@@ -1,3 +1,8 @@
-1) product table update with no of stocks (update by buyer)
-2) Notify  seller if min stocks avialable
-3) Seller table 
+Productsbysellerid,
+product controller update, 
+middleware ===> verify seller-crud
+,verify token ===> list,
+payment gateway,
+order pdf,
+url creation, ====> frontend
+video popup add  ===> frontend
