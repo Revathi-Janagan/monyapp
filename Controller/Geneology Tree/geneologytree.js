@@ -25,29 +25,28 @@ const genealogyController = {
           if (descendantCount < 10) {
             // Step 1: Insert the new member into the member table
             const insertMemberQuery = `
-            INSERT INTO member (name, address, email, password, phonenumber, account_name, acc_no, branch, ifsc_code, pancard_front_image, pancard_back_image, aadhaar_no, pincode, pancard_front_image_path, pancard_back_image_path, parent_id)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
-          `;
+  INSERT INTO member (name, address, email, password, phonenumber, account_name, acc_no, branch, ifsc_code, pancard_no, aadhaar_no, pincode, parent_id)
+  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+`;
 
             connection.query(
               insertMemberQuery,
               [
-                newMemberDetails.name,
-                newMemberDetails.address,
-                newMemberDetails.email,
-                newMemberDetails.password,
-                newMemberDetails.phonenumber,
-                newMemberDetails.account_name,
-                newMemberDetails.acc_no,
-                newMemberDetails.branch,
-                newMemberDetails.ifsc_code,
-                newMemberDetails.pancard_front_image,
-                newMemberDetails.pancard_back_image,
-                newMemberDetails.aadhaar_no,
-                newMemberDetails.pincode,
-                newMemberDetails.pancard_front_image_path,
-                newMemberDetails.pancard_back_image_path,
-                parentMemberId, // Set the parent_id for the new member
+                [
+                  newMemberDetails.name,
+                  newMemberDetails.address,
+                  newMemberDetails.email,
+                  newMemberDetails.password,
+                  newMemberDetails.phonenumber,
+                  newMemberDetails.account_name,
+                  newMemberDetails.acc_no,
+                  newMemberDetails.branch,
+                  newMemberDetails.ifsc_code,
+                  newMemberDetails.pancard_no,
+                  newMemberDetails.aadhaar_no,
+                  newMemberDetails.pincode,
+                  parentMemberId, // Set the parent_id for the new member
+                ],
               ],
               (insertErr, insertResult) => {
                 if (insertErr) {
@@ -76,13 +75,10 @@ const genealogyController = {
                           .status(500)
                           .json({ error: "Internal Server Error" });
                       } else {
-                        res
-                          .status(200)
-                          .json({
-                            message:
-                              "Member and relationship added successfully",
-                            treeInsertResult,
-                          });
+                        res.status(200).json({
+                          message: "Member and relationship added successfully",
+                          treeInsertResult,
+                        });
                       }
                     }
                   );
@@ -90,11 +86,9 @@ const genealogyController = {
               }
             );
           } else {
-            res
-              .status(400)
-              .json({
-                error: "Genealogy tree limit reached for the parent member.",
-              });
+            res.status(400).json({
+              error: "Genealogy tree limit reached for the parent member.",
+            });
           }
         }
       }
