@@ -9,9 +9,12 @@ const destination = (subfolder) => {
 };
 
 // Generate a unique filename
-const filename = (file) => {
+const filename = (req, file, cb) => {
   const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-  return file.fieldname + "-" + uniqueSuffix + path.extname(file.originalname);
+  const fieldName = Array.isArray(file.fieldname)
+    ? file.fieldname[0]
+    : file.fieldname;
+  cb(null, fieldName + "-" + uniqueSuffix + path.extname(file.originalname));
 };
 
 // Create a multer storage configuration

@@ -5,3 +5,5 @@ const multer = require("multer");
 const login = require("../Controller/Login/login");
 
 router.post("/login",login.login);
+
+module.exports = router;

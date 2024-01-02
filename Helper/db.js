@@ -4,7 +4,7 @@ const {
   MYSQL_HOST,
   MYSQL_USERNAME,
   MYSQL_PASSWORD,
-  MYSQL_DATABASE,  
+  MYSQL_DATABASE,
 } = require("../Config/config");
 
 const connection = mysql.createConnection({

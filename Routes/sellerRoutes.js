@@ -7,11 +7,9 @@ const upload = require("../Config/multerConfig");
 
 router.post(
   "/regSeller",
-  // upload.createMulterInstance("sellers").fields([
-  //   { name: 'pancardFrontImage', maxCount: 1 },
-  //   { name: 'pancardBackImage', maxCount: 1 },
-  //   { name: 'companyLogo', maxCount: 1 }
-  // ]),
+  upload
+    .createMulterInstance("sellers")
+    .fields([{ name: "company_logo", maxCount: 1 }]),
   SellerReg.regSeller
 );
 
@@ -19,11 +17,9 @@ router.get("/getAllSellers", SellerReg.getAllSellers);
 router.get("/getSellerById/:id", SellerReg.getSellerById);
 router.put(
   "/updateSellerById/:id",
-  upload.createMulterInstance("sellers").fields([
-    { name: 'pancardFrontImage', maxCount: 1 },
-    { name: 'pancardBackImage', maxCount: 1 },
-    { name: 'companyLogo', maxCount: 1 }
-  ]),
+  upload
+    .createMulterInstance("sellers")
+    .fields([{ name: "company_logo", maxCount: 1 }]),
   SellerReg.updateSellerById
 );
 

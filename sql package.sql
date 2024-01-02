@@ -19,6 +19,16 @@ CREATE TABLE member (
     FOREIGN KEY (parent_id) REFERENCES member(memb_id)
 );
 
+-- Disable safe update mode
+SET SQL_SAFE_UPDATES = 0;
+
+-- Delete all records from the 'member' table
+DELETE FROM member;
+
+-- Re-enable safe update mode
+SET SQL_SAFE_UPDATES = 1;
+
+
 -- Seller Table
 CREATE TABLE seller (
     seller_id INT PRIMARY KEY,

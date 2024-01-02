@@ -4,15 +4,17 @@ const multer = require("multer");
 
 const MemberReg = require("../Controller/Member/MemberReg");
 const upload = require("../Config/multerConfig");
+const { verifyToken, verifyMember } = require("../Middlewares/TokenVerification");
+
 
 router.post(
   "/regMemb",  
   MemberReg.regMemb
 );
-router.get("/getAllMemb", MemberReg.getAllMemb);
-router.get("/getMmbById", MemberReg.getMembById);
+router.get("/getAllMemb",verifyToken, verifyMember, MemberReg.getAllMemb);
+router.get("/getMembById/:id", MemberReg.getMembById);
 router.put(
-  "/updateMemb",  MemberReg.updateMembById
+  "/updateMemb/:id", verifyToken, verifyMember, MemberReg.updateMembById
 );
 
 router.delete("/deleteMemb", MemberReg.deleteMembById);

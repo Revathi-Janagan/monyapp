@@ -22,3 +22,13 @@ module.exports.verifyToken = (req, res, next) => {
     next();
   });
 };
+
+// Middleware for verifying if the user is a member
+module.exports.verifyMember = (req, res, next) => {
+  if (req.user && req.user.userType === "member") {
+    // User is a member
+    next();
+  } else {
+    return res.status(403).json({ error: "Forbidden: Access denied for this user" });
+  }
+};
