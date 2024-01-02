@@ -78,7 +78,7 @@ async function calculateCommission(product_id, quantity) {
     // Calculate total amount for the product
     const totalAmount = final_price * quantity;
 
-    // Calculate commission based on total amount and commission rate
+    // Calculate commission based on total amount and commission rate for that order
     const commissionAmount = (totalAmount * commission_rate) / 100;
 
     return parseFloat(commissionAmount.toFixed(2));
