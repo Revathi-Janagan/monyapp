@@ -13,5 +13,6 @@ router.get("/getMembById/:id", MemberReg.getMembById);
 router.put("/updateMemb/:id", verifyToken, verifyMember, MemberReg.updateMembById);
 router.delete("/deleteMemb", MemberReg.deleteMembById);
 router.post("/genealogy", verifyToken, verifyMember, GenealogyReg.addMemberUnderTree);
+router.get("/listmembersfromparent/:userId", verifyToken,verifyMember,GenealogyReg.listDescendants);
 
 module.exports = router;
