@@ -5,7 +5,8 @@ const jwt = require("jsonwebtoken");
 
 module.exports = {
   // Create a new member
-  // regMemb: async (req, res) => {
+
+  // regMemb: (req, res) => {
   //   console.log("Inside Register as Member!!!");
 
   //   try {
@@ -26,43 +27,75 @@ module.exports = {
   //     } = req.body;
 
   //     // Hash the password
-  //     const hashedPassword = await bcrypt.hash(password, saltRounds);
+  //     bcrypt.hash(password, saltRounds, (hashError, hashedPassword) => {
+  //       if (hashError) {
+  //         console.error("Error hashing password:", hashError.message);
+  //         res.status(500).json({ error: "Internal Server Error" });
+  //         return;
+  //       }
 
-  //     // Insert the new member into the member table
-  //     const insertQuery = `
-  //       INSERT INTO member
-  //       (name, address, email, password, phonenumber, account_name, acc_no, branch, ifsc_code, pancard_no, aadhaar_no, pincode, parent_id)
-  //       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-  //     `;
+  //       // Insert the new member into the member table
+  //       const insertQuery = `
+  //         INSERT INTO member
+  //         (name, address, email, password, phonenumber, account_name, acc_no, branch, ifsc_code, pancard_no, aadhaar_no, pincode, parent_id)
+  //         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  //       `;
 
-  //     const result = await connection.query(insertQuery, [
-  //       name,
-  //       address,
-  //       email,
-  //       hashedPassword,
-  //       phonenumber,
-  //       account_name,
-  //       acc_no,
-  //       branch,
-  //       ifsc_code,
-  //       pancard_no,
-  //       aadhaar_no,
-  //       pincode,
-  //       parent_id,
-  //     ]);
+  //       connection.query(
+  //         insertQuery,
+  //         [
+  //           name,
+  //           address,
+  //           email,
+  //           hashedPassword,
+  //           phonenumber,
+  //           account_name,
+  //           acc_no,
+  //           branch,
+  //           ifsc_code,
+  //           pancard_no,
+  //           aadhaar_no,
+  //           pincode,
+  //           parent_id,
+  //         ],
+  //         async (queryError, result) => {
+  //           if (queryError) {
+  //             console.error("Error registering member:", queryError.message);
+  //             res.status(500).json({ error: "Internal Server Error" });
+  //           } else {
+  //             // Fetch the inserted data after the insertion
+  //             const insertedDataQuery = `
+  //               SELECT * FROM member WHERE memb_id = ?
+  //             `;
 
-  //     console.log("Member registered successfully");
-  //     res.status(200).json({
-  //       message: "Member registered successfully",
-  //       result,
+  //             connection.query(insertedDataQuery, [result.insertId], (selectError, selectedData) => {
+  //               if (selectError) {
+  //                 console.error("Error fetching inserted data:", selectError.message);
+  //                 res.status(500).json({ error: "Internal Server Error" });
+  //               } else {
+  //                 console.log("Member registered successfully");
+  //                 res.status(200).json({
+  //                   message: "Member registered successfully",
+  //                   result: selectedData[0], // Sending the inserted data in the response
+  //                 });
+  //               }
+
+  //               // Close the connection after executing the queries
+
+  //             });
+  //           }
+  //         }
+  //       );
   //     });
   //   } catch (error) {
   //     console.error("Error registering member:", error.message);
   //     res.status(500).json({ error: "Internal Server Error" });
   //   }
-  // },  
+  // },
+
   regMemb: (req, res) => {
     console.log("Inside Register as Member!!!");
+    const MAX_DASHBOARD_MEMBERS = 3; // Set the maximum number of members allowed via the dashboard
 
     try {
       const {
@@ -81,67 +114,121 @@ module.exports = {
         parent_id, // Assuming this is provided by your genealogy tree logic
       } = req.body;
 
-      // Hash the password
-      bcrypt.hash(password, saltRounds, (hashError, hashedPassword) => {
-        if (hashError) {
-          console.error("Error hashing password:", hashError.message);
-          res.status(500).json({ error: "Internal Server Error" });
-          return;
-        }
+      // Check if the member is trying to add via the dashboard
+      const isAddingViaDashboard = !parent_id;
 
-        // Insert the new member into the member table
-        const insertQuery = `
-          INSERT INTO member 
-          (name, address, email, password, phonenumber, account_name, acc_no, branch, ifsc_code, pancard_no, aadhaar_no, pincode, parent_id) 
-          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        `;
+      // If the member is trying to add via the dashboard, limit to the first three members
+      if (isAddingViaDashboard) {
+        // Check if the number of dashboard members exceeds the limit
+        const countDashboardMembersQuery = `
+        SELECT COUNT(*) as dashboardMemberCount FROM member WHERE parent_id IS NULL;`;
 
         connection.query(
-          insertQuery,
-          [
-            name,
-            address,
-            email,
-            hashedPassword,
-            phonenumber,
-            account_name,
-            acc_no,
-            branch,
-            ifsc_code,
-            pancard_no,
-            aadhaar_no,
-            pincode,
-            parent_id,
-          ],
-          async (queryError, result) => {
-            if (queryError) {
-              console.error("Error registering member:", queryError.message);
+          countDashboardMembersQuery,
+          (countError, countResult) => {
+            if (countError) {
+              console.error(
+                "Error counting dashboard members:",
+                countError.message
+              );
               res.status(500).json({ error: "Internal Server Error" });
             } else {
-              // Fetch the inserted data after the insertion
-              const insertedDataQuery = `
-                SELECT * FROM member WHERE memb_id = ?
-              `;
+              const dashboardMemberCount = countResult[0].dashboardMemberCount;
 
-              connection.query(insertedDataQuery, [result.insertId], (selectError, selectedData) => {
-                if (selectError) {
-                  console.error("Error fetching inserted data:", selectError.message);
-                  res.status(500).json({ error: "Internal Server Error" });
-                } else {
-                  console.log("Member registered successfully");
-                  res.status(200).json({
-                    message: "Member registered successfully",
-                    result: selectedData[0], // Sending the inserted data in the response
-                  });
-                }
+              if (dashboardMemberCount < MAX_DASHBOARD_MEMBERS) {
+                // Hash the password
+                bcrypt.hash(
+                  password,
+                  saltRounds,
+                  (hashError, hashedPassword) => {
+                    if (hashError) {
+                      console.error(
+                        "Error hashing password:",
+                        hashError.message
+                      );
+                      res.status(500).json({ error: "Internal Server Error" });
+                      return;
+                    }
 
-                // Close the connection after executing the queries
-               
-              });
+                    // Insert the new member into the member table
+                    const insertQuery = `
+                  INSERT INTO member 
+                  (name, address, email, password, phonenumber, account_name, acc_no, branch, ifsc_code, pancard_no, aadhaar_no, pincode, parent_id) 
+                  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                `;
+
+                    connection.query(
+                      insertQuery,
+                      [
+                        name,
+                        address,
+                        email,
+                        hashedPassword,
+                        phonenumber,
+                        account_name,
+                        acc_no,
+                        branch,
+                        ifsc_code,
+                        pancard_no,
+                        aadhaar_no,
+                        pincode,
+                        parent_id,
+                      ],
+                      async (queryError, result) => {
+                        if (queryError) {
+                          console.error(
+                            "Error registering member:",
+                            queryError.message
+                          );
+                          res
+                            .status(500)
+                            .json({ error: "Internal Server Error" });
+                        } else {
+                          // Fetch the inserted data after the insertion
+                          const insertedDataQuery = `
+                        SELECT * FROM member WHERE memb_id = ?
+                      `;
+
+                          connection.query(
+                            insertedDataQuery,
+                            [result.insertId],
+                            (selectError, selectedData) => {
+                              if (selectError) {
+                                console.error(
+                                  "Error fetching inserted data:",
+                                  selectError.message
+                                );
+                                res
+                                  .status(500)
+                                  .json({ error: "Internal Server Error" });
+                              } else {
+                                console.log("Member registered successfully");
+                                res.status(200).json({
+                                  message: "Member registered successfully",
+                                  result: selectedData[0], // Sending the inserted data in the response
+                                });
+                              }
+
+                              // Close the connection after executing the queries
+                            }
+                          );
+                        }
+                      }
+                    );
+                  }
+                );
+              } else {
+                // If the limit is exceeded, reject the request
+                console.error("Limit reached for members added via dashboard.");
+                res
+                  .status(403)
+                  .json({ error: "Dashboard Member Limit Exceeded" });      
+                             
+              }
             }
           }
         );
-      });
+      }
     } catch (error) {
       console.error("Error registering member:", error.message);
       res.status(500).json({ error: "Internal Server Error" });
@@ -182,7 +269,8 @@ module.exports = {
           console.log("Fetched member by id successfully");
           res.status(200).json({
             message: "Fetched member by id successfully",
-            member: result[0], });
+            member: result[0],
+          });
         } else {
           console.log("Member not found");
           res.status(404).json({ message: "Member not found" });
@@ -194,7 +282,7 @@ module.exports = {
   // Update a member by ID
   updateMembById: (req, res) => {
     console.log("Inside Update Member By Id!!!");
-  
+
     const memberId = req.params.id;
     const {
       name,
@@ -210,10 +298,10 @@ module.exports = {
       aadhaar_no,
       pincode,
     } = req.body;
-  
+
     // Hash the new password
     const hashedPassword = bcrypt.hashSync(newPassword, saltRounds);
-  
+
     const updateQuery = `
       UPDATE member
       SET 
@@ -231,7 +319,7 @@ module.exports = {
         pincode = ?
       WHERE memb_id = ?
     `;
-  
+
     connection.query(
       updateQuery,
       [
@@ -263,7 +351,6 @@ module.exports = {
       }
     );
   },
-
 
   // Delete a member by ID
   deleteMembById: (req, res) => {

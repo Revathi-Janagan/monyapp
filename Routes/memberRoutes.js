@@ -3,6 +3,7 @@ const router = express.Router();
 const multer = require("multer");
 
 const MemberReg = require("../Controller/Member/MemberReg");
+const GenealogyReg = require("../Controller/Geneology Tree/geneologytree")
 const upload = require("../Config/multerConfig");
 const { verifyToken, verifyMember } = require("../Middlewares/TokenVerification");
 
@@ -18,5 +19,7 @@ router.put(
 );
 
 router.delete("/deleteMemb", MemberReg.deleteMembById);
+
+router.post("/genealogy", GenealogyReg.addMemberUnderTree);
 
 module.exports = router;

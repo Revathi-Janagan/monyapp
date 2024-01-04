@@ -26,12 +26,10 @@ const genealogyController = {
           newMemberDetails.acc_no,
           newMemberDetails.branch,
           newMemberDetails.ifsc_code,
-          newMemberDetails.pancard_front_image,
-          newMemberDetails.pancard_back_image,
+          newMemberDetails.pancard_no,         
           newMemberDetails.aadhaar_no,
           newMemberDetails.pincode,
-          newMemberDetails.pancard_front_image_path,
-          newMemberDetails.pancard_back_image_path,
+          
           null, // Set parent_id as null for the first member
         ],
         (insertErr, insertResult) => {
