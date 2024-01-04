@@ -207,9 +207,7 @@ module.exports = {
                                   message: "Member registered successfully",
                                   result: selectedData[0], // Sending the inserted data in the response
                                 });
-                              }
-
-                              // Close the connection after executing the queries
+                              }                             
                             }
                           );
                         }

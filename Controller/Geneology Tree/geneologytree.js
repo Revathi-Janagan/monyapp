@@ -5,15 +5,17 @@ module.exports = {
   // Add a new member under the genealogy tree
   addMemberUnderTree: (req, res) => {
     // Assuming your authentication middleware adds memb_id to req
-    const { user, newMemberDetails } = req;
-    
-    console.log(user.memb_id);
+    const { user, newMemberDetails } = req.body;
 
-    if (!user || !user.memb_id || !newMemberDetails) {
-      console.error("Invalid request body structure");
-      return res.status(400).json({ error: "Invalid request body structure" });
-    }
-    if (!user.memb_id) {
+    console.log(req.user);
+    console.log("user:", user.userId);
+    console.log("newMemberDetails:", newMemberDetails);
+
+    // if (!user || !newMemberDetails) {
+    //   console.error("Invalid request body structure");
+    //   return res.status(400).json({ error: "Invalid request body structure" });
+    // }
+    if (!user.parent_id) {
       // Insert the first member into the member table
       const insertFirstMemberQuery = `
         INSERT INTO member (name, address, email, password, phonenumber, account_name, acc_no, branch, ifsc_code, pancard_no,  aadhaar_no, pincode,  parent_id)
@@ -113,7 +115,7 @@ module.exports = {
                   newMemberDetails.pancard_back_image,
                   newMemberDetails.aadhaar_no,
                   newMemberDetails.pincode,
-                  user.memb_id, // Set the parent_id for the new member
+                  user.userId, // Set the parent_id for the new member
                 ],
                 (insertErr, insertResult) => {
                   if (insertErr) {

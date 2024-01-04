@@ -16,6 +16,7 @@ module.exports.verifyToken = (req, res, next) => {
 
   jwt.verify(token, ACCESS_TOKEN, options, (err, decoded) => {
     if (err) {
+      console.error("Error verifying token:", err.message);
       return res.status(400).json({ error: "Invalid Token" });
     }
     req.user = decoded;

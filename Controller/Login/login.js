@@ -65,6 +65,7 @@ module.exports = {
               userId: user[idField],
               userType,
               userName: user.name,
+              userParentId : user.parent_id,
             };
             console.log("payload is", payload);
 

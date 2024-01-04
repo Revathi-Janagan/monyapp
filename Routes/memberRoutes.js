@@ -7,19 +7,11 @@ const GenealogyReg = require("../Controller/Geneology Tree/geneologytree")
 const upload = require("../Config/multerConfig");
 const { verifyToken, verifyMember } = require("../Middlewares/TokenVerification");
 
-
-router.post(
-  "/regMemb",  
-  MemberReg.regMemb
-);
-router.get("/getAllMemb",verifyToken, verifyMember, MemberReg.getAllMemb);
+router.post("/regMemb", MemberReg.regMemb);
+router.get("/getAllMemb", verifyToken, verifyMember, MemberReg.getAllMemb);
 router.get("/getMembById/:id", MemberReg.getMembById);
-router.put(
-  "/updateMemb/:id", verifyToken, verifyMember, MemberReg.updateMembById
-);
-
+router.put("/updateMemb/:id", verifyToken, verifyMember, MemberReg.updateMembById);
 router.delete("/deleteMemb", MemberReg.deleteMembById);
-
-router.post("/genealogy", GenealogyReg.addMemberUnderTree);
+router.post("/genealogy", verifyToken, verifyMember, GenealogyReg.addMemberUnderTree);
 
 module.exports = router;
