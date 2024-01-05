@@ -34,8 +34,7 @@ module.exports = {
 
           const user = sellerUser || memberUser;
           const userType = sellerUser ? "seller" : "member";
-          const idField = sellerUser ? "seller_id" : "memb_id";   
-               
+          const idField = sellerUser ? "seller_id" : "memb_id";
 
           console.log("idField:", idField);
 
@@ -65,14 +64,15 @@ module.exports = {
               userId: user[idField],
               userType,
               userName: user.name,
-              userParentId : user.parent_id,
+              userParentId: user.parent_id,
             };
             console.log("payload is", payload);
 
             // Generate and send JWT token
             const token = jwt.sign(payload, ACCESS_TOKEN, { expiresIn: "12h" });
             console.log("token is", token);
-            res.status(200).json({ message: "Login successful", token });
+            res.status(200).json({ message: "Login successful", AccessToken: token });
+            
           });
         }
       );
