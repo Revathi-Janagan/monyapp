@@ -3,45 +3,48 @@ const connection = require("../../Helper/db");
 module.exports = {
   // Create a new product
   createProduct: (req, res) => {
-    console.log("Inside Create Product!!!");
-
+    console.log("Inside Create Product!!!");   
     const {
       seller_id,
       product_name,
       product_images,
-      video, // Assuming 'video' is the field for video file
+      video_url,
+      total_stocks_added,
+      no_of_stocks_available,
+      commission_rate,
       mrp_price,
       offer,
       final_price,
     } = req.body;
-
-    const insertQuery = `INSERT INTO product 
-      (seller_id, product_name, product_images, video_url, mrp_price, offer, final_price) 
-      VALUES (?, ?, ?, ?, ?, ?, ?)`;
-
-    connection.query(
-      insertQuery,
-      [
-        seller_id,
-        product_name,
-        JSON.stringify(product_images),
-        video, // You need to specify how the video URL is obtained or generated
-        mrp_price,
-        offer,
-        final_price,
-      ],
-      (err, result) => {
-        if (err) {
-          console.error("Error creating product:", err.message);
-          res.status(500).json({ error: "Internal Server Error" });
-        } else {
-          console.log("Product created successfully");
-          res
-            .status(200)
-            .json({ message: "Product created successfully", result });
-        }
+  
+    const query = `
+      INSERT INTO product 
+      (seller_id, product_name, product_images, video_url, total_stocks_added, no_of_stocks_available, commission_rate, mrp_price, offer, final_price) 
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+    `;
+  
+    const values = [
+      seller_id,
+      product_name,
+      JSON.stringify(product_images),
+      video_url,
+      total_stocks_added,
+      no_of_stocks_available,
+      commission_rate,
+      mrp_price,
+      offer,
+      final_price,
+    ];
+  
+    db.query(query, values, (err, result) => {
+      if (err) {
+        console.error('Error creating product: ' + err);
+        res.status(500).json({ error: 'Internal Server Error' });
+        return;
       }
-    );
+  
+      res.status(201).json({ message: 'Product created successfully', productId: result.insertId });
+    });
   },
 
   // Get all products
@@ -93,7 +96,10 @@ module.exports = {
       seller_id,
       product_name,
       product_images,
-      video, // Assuming 'video' is the field for video file
+      video_url,
+      total_stocks_added,
+      no_of_stocks_available,
+      commission_rate,
       mrp_price,
       offer,
       final_price,
@@ -105,6 +111,10 @@ module.exports = {
       seller_id,
       product_name,
       JSON.stringify(product_images),
+      video_url,
+      total_stocks_added,
+      no_of_stocks_available,
+      commission_rate,
       mrp_price,
       offer,
       final_price,
@@ -116,13 +126,20 @@ module.exports = {
       const videoPath = videoFile.path;
 
       updateFields = `video_url = ?, `;
-      updateValues.unshift(videoPath);
+      updateValues.splice(3, 0, videoPath); // Insert videoPath after video_url in updateValues
     }
 
     const updateQuery = `UPDATE product SET 
+      seller_id = ?, 
+      product_name = ?, 
+      product_images = ?, 
       ${updateFields}
-      seller_id = ?, product_name = ?, product_images = ?, 
-      mrp_price = ?, offer = ?, final_price = ? 
+      total_stocks_added = ?, 
+      no_of_stocks_available = ?, 
+      commission_rate = ?, 
+      mrp_price = ?, 
+      offer = ?, 
+      final_price = ? 
       WHERE product_id = ?`;
 
     connection.query(updateQuery, updateValues, (err, result) => {
@@ -139,7 +156,8 @@ module.exports = {
         }
       }
     });
-  },
+},
+
 
   // Delete a product by ID
   deleteProductById: (req, res) => {
