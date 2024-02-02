@@ -3,7 +3,7 @@ const connection = require("../../Helper/db");
 module.exports = {
   // Create a new product
   createProduct: (req, res) => {
-    console.log("Inside Create Product!!!");   
+    console.log("Inside Create Product!!!");
     const {
       seller_id,
       product_name,
@@ -16,13 +16,13 @@ module.exports = {
       offer,
       final_price,
     } = req.body;
-  
+
     const query = `
       INSERT INTO product 
       (seller_id, product_name, product_images, video_url, total_stocks_added, no_of_stocks_available, commission_rate, mrp_price, offer, final_price) 
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
     `;
-  
+
     const values = [
       seller_id,
       product_name,
@@ -35,15 +35,20 @@ module.exports = {
       offer,
       final_price,
     ];
-  
+
     db.query(query, values, (err, result) => {
       if (err) {
-        console.error('Error creating product: ' + err);
-        res.status(500).json({ error: 'Internal Server Error' });
+        console.error("Error creating product: " + err);
+        res.status(500).json({ error: "Internal Server Error" });
         return;
       }
-  
-      res.status(201).json({ message: 'Product created successfully', productId: result.insertId });
+
+      res
+        .status(201)
+        .json({
+          message: "Product created successfully",
+          productId: result.insertId,
+        });
     });
   },
 
@@ -72,6 +77,28 @@ module.exports = {
     const selectQuery = "SELECT * FROM product WHERE product_id = ?";
 
     connection.query(selectQuery, [productId], (err, result) => {
+      if (err) {
+        console.error("Error getting product by id:", err.message);
+        res.status(500).json({ error: "Internal Server Error" });
+      } else {
+        if (result.length > 0) {
+          console.log("Fetched product by id successfully");
+          res.status(200).json(result[0]);
+        } else {
+          console.log("Product not found");
+          res.status(404).json({ message: "Product not found" });
+        }
+      }
+    });
+  },
+
+  getProductBySellerId: (req, res) => {
+    console.log("Inside Get Product By Id!!!");
+
+    const sellerId = req.params.id;
+    const selectQuery = "SELECT * FROM product WHERE seller_id = ?";
+
+    connection.query(selectQuery, [sellerId], (err, result) => {
       if (err) {
         console.error("Error getting product by id:", err.message);
         res.status(500).json({ error: "Internal Server Error" });
@@ -156,8 +183,7 @@ module.exports = {
         }
       }
     });
-},
-
+  },
 
   // Delete a product by ID
   deleteProductById: (req, res) => {
