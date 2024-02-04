@@ -8,7 +8,6 @@ module.exports = {
       seller_id,
       product_name,
       product_images,
-      video_url,
       total_stocks_added,
       no_of_stocks_available,
       commission_rate,
@@ -16,41 +15,49 @@ module.exports = {
       offer,
       final_price,
     } = req.body;
-
-    const query = `
-      INSERT INTO product 
-      (seller_id, product_name, product_images, video_url, total_stocks_added, no_of_stocks_available, commission_rate, mrp_price, offer, final_price) 
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
-    `;
-
-    const values = [
-      seller_id,
-      product_name,
-      JSON.stringify(product_images),
-      video_url,
-      total_stocks_added,
-      no_of_stocks_available,
-      commission_rate,
-      mrp_price,
-      offer,
-      final_price,
-    ];
-
-    db.query(query, values, (err, result) => {
-      if (err) {
-        console.error("Error creating product: " + err);
-        res.status(500).json({ error: "Internal Server Error" });
-        return;
-      }
-
-      res
-        .status(201)
-        .json({
+  
+    try {
+      const video_url = req.files["video_url"][0].filename;
+      console.log(req.files);
+      console.log(req.body);
+  
+      const query = `
+        INSERT INTO product 
+        (seller_id, product_name, product_images, video_url, total_stocks_added, no_of_stocks_available, commission_rate, mrp_price, offer, final_price) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+      `;
+  
+      const values = [
+        seller_id,
+        product_name,
+        JSON.parse(product_images), // Check if JSON parsing is necessary
+        video_url,
+        total_stocks_added,
+        no_of_stocks_available,
+        commission_rate,
+        mrp_price,
+        offer,
+        final_price,
+      ];
+  
+      db.query(query, values, (err, result) => {
+        if (err) {
+          console.error("Error creating product:", err);
+          res.status(500).json({ error: "Internal Server Error", details: err.message });
+          return;
+        }
+  
+        res.status(201).json({
           message: "Product created successfully",
           productId: result.insertId,
         });
-    });
+      });
+    } catch (error) {
+      console.error("Error processing request:", error);
+      res.status(400).json({ error: "Bad Request", details: error.message });
+    }
   },
+  
 
   // Get all products
   getAllProducts: (req, res) => {

@@ -66,7 +66,8 @@ module.exports = {
               userName: user.name,
               userParentId: user.parent_id,
             };
-            console.log("payload is", payload);
+            
+            console.log("Payload is",payload)
 
             // Generate and send JWT token
             const token = jwt.sign(payload, ACCESS_TOKEN, { expiresIn: "12h" });

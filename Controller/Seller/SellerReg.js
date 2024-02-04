@@ -30,17 +30,16 @@ module.exports = {
   //     } = req.body;
 
   //     // Access uploaded files via req.files
-  //     const company_logo = req.files["company_logo"][0].filename;     
+  //     const company_logo = req.files["company_logo"][0].filename;
   //     console.log(req.files);
-   
 
   //     // Hash the password
   //     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
   //     const insertQuery = `
-  //       INSERT INTO seller 
-  //       (name, address, email, password, phonenumber, account_name, acc_no, branch, ifsc_code, 
-  //       company_logo, company_name, gst_no, pancard_no, aadhaar_no, pincode) 
+  //       INSERT INTO seller
+  //       (name, address, email, password, phonenumber, account_name, acc_no, branch, ifsc_code,
+  //       company_logo, company_name, gst_no, pancard_no, aadhaar_no, pincode)
   //       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   //     `;
 
@@ -121,47 +120,60 @@ module.exports = {
           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `;
 
-        connection.query(insertQuery, [
-          name,
-          address,
-          email,
-          hashedPassword,
-          phonenumber,
-          account_name,
-          acc_no,
-          branch,
-          ifsc_code,
-          company_logo,
-          company_name,
-          gst_no,
-          pancard_no,
-          aadhaar_no,
-          pincode,
-        ], (queryErr, result) => {
-          if (queryErr) {
-            console.error("Error registering seller:", queryErr.message);
-            return res.status(500).json({ error: "Internal Server Error" });
-          }
-
-          console.log("Seller registered successfully");
-
-          // Fetch the inserted data after the insertion
-          const insertedDataQuery = `
-            SELECT * FROM seller WHERE seller_id = ?
-          `;
-
-          connection.query(insertedDataQuery, [result.insertId], (selectErr, selectedData) => {
-            if (selectErr) {
-              console.error("Error fetching inserted data:", selectErr.message);
+        connection.query(
+          insertQuery,
+          [
+            name,
+            address,
+            email,
+            hashedPassword,
+            phonenumber,
+            account_name,
+            acc_no,
+            branch,
+            ifsc_code,
+            company_logo,
+            company_name,
+            gst_no,
+            pancard_no,
+            aadhaar_no,
+            pincode,
+          ],
+          (queryErr, result) => {
+            if (queryErr) {
+              console.error("Error registering seller:", queryErr.message);
               return res.status(500).json({ error: "Internal Server Error" });
             }
 
-            res.status(200).json({
-              message: "Seller registered successfully",
-              result: selectedData[0],
-            });
-          });
-        });
+            console.log("Seller registered successfully");
+
+            // Fetch the inserted data after the insertion
+            const insertedDataQuery = `
+            SELECT * FROM seller WHERE seller_id = ?
+          `;
+
+            connection.query(
+              insertedDataQuery,
+              [result.insertId],
+              (selectErr, selectedData) => {
+                if (selectErr) {
+                  console.error(
+                    "Error fetching inserted data:",
+                    selectErr.message
+                  );
+                  return res
+                    .status(500)
+                    .json({ error: "Internal Server Error" });
+                }
+
+                res.status(200).json({
+                  message: "Seller registered successfully",
+                  result: selectedData[0],
+                });
+              }
+            );
+          }
+        );
       });
     } catch (error) {
       console.error("Unexpected error:", error.message);
@@ -202,7 +214,10 @@ module.exports = {
       } else {
         if (result.length > 0) {
           console.log("Fetched seller by id successfully");
-          res.status(200).json(result[0]);
+          res.status(200).json({
+            message: "Fetched seller by id successfully",
+            seller: result[0],
+          });
         } else {
           console.log("Seller not found");
           res.status(404).json({ message: "Seller not found" });
@@ -234,11 +249,15 @@ module.exports = {
       } = req.body;
 
       // Access uploaded files via req.files
-      const companyLogo = req.files["companyLogo"] && req.files["companyLogo"][0];
+      const companyLogo =
+        req.files["companyLogo"] && req.files["companyLogo"][0];
 
       // Get the existing company logo path from the database
-      const selectLogoQuery = "SELECT company_logo_path FROM seller WHERE seller_id = ?";
-      const existingLogoResult = await connection.query(selectLogoQuery, [sellerId]);
+      const selectLogoQuery =
+        "SELECT company_logo_path FROM seller WHERE seller_id = ?";
+      const existingLogoResult = await connection.query(selectLogoQuery, [
+        sellerId,
+      ]);
       const existingLogoPath = existingLogoResult[0].company_logo_path;
 
       // Update the seller in the seller table

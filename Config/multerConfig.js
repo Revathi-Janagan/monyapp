@@ -1,4 +1,5 @@
 const multer = require("multer");
+// const multer = require("multer");
 const path = require("path");
 
 // Set the destination folder for uploaded files
@@ -55,6 +56,11 @@ const createMulterInstance = (subfolder) =>
     fileFilter: fileFilter,
   });
 
+// Create a function to handle array of files for a specific field
+const handleArrayFiles = (fieldName, maxCount) =>
+  createMulterInstance(fieldName).array(fieldName, maxCount);
+
 module.exports = {
   createMulterInstance,
+  handleArrayFiles,
 };
