@@ -4,10 +4,12 @@ const multer = require("multer");
 const ProductController = require("../Controller/Products/productList");
 const upload = require("../Config/multerConfig");
 
-router.post("/createProduct", upload.createMulterInstance("products").fields([
-  { name: 'product_images', maxCount: 15 }, // Assuming product_images is an array of images
-  { name: 'video', maxCount: 1 }
-]), ProductController.createProduct);
+router.post(
+  '/createProduct',
+  upload.createMulterInstance('product_images').array('product_images', 15),
+  upload.createMulterInstance('videos').single('video_url'),
+  ProductController.createProduct
+);
 
 router.get("/getAllProducts", ProductController.getAllProducts);
 

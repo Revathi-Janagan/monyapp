@@ -2,12 +2,66 @@ const connection = require("../../Helper/db");
 
 module.exports = {
   // Create a new product
+  // createProduct: (req, res) => {
+  //   console.log("Inside Create Product!!!");
+  //   const {
+  //     seller_id,
+  //     product_name,
+  //     product_images,
+  //     total_stocks_added,
+  //     no_of_stocks_available,
+  //     commission_rate,
+  //     mrp_price,
+  //     offer,
+  //     final_price,
+  //   } = req.body;
+  
+  //   try {
+  //     const video_url = req.files["video_url"][0].filename;
+  //     console.log(req.files);
+  //     console.log(req.body);
+  
+  //     const query = `
+  //       INSERT INTO product 
+  //       (seller_id, product_name, product_images, video_url, total_stocks_added, no_of_stocks_available, commission_rate, mrp_price, offer, final_price) 
+  //       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+  //     `;
+  
+  //     const values = [
+  //       seller_id,
+  //       product_name,
+  //       JSON.parse(product_images), // Check if JSON parsing is necessary
+  //       video_url,
+  //       total_stocks_added,
+  //       no_of_stocks_available,
+  //       commission_rate,
+  //       mrp_price,
+  //       offer,
+  //       final_price,
+  //     ];
+  
+  //     db.query(query, values, (err, result) => {
+  //       if (err) {
+  //         console.error("Error creating product:", err);
+  //         res.status(500).json({ error: "Internal Server Error", details: err.message });
+  //         return;
+  //       }
+  
+  //       res.status(201).json({
+  //         message: "Product created successfully",
+  //         productId: result.insertId,
+  //       });
+  //     });
+  //   } catch (error) {
+  //     console.error("Error processing request:", error);
+  //     res.status(400).json({ error: "Bad Request", details: error.message });
+  //   }
+  // },
   createProduct: (req, res) => {
     console.log("Inside Create Product!!!");
     const {
       seller_id,
       product_name,
-      product_images,
       total_stocks_added,
       no_of_stocks_available,
       commission_rate,
@@ -17,7 +71,12 @@ module.exports = {
     } = req.body;
   
     try {
+      // Extracting the video file
       const video_url = req.files["video_url"][0].filename;
+     
+      // Extracting an array of image filenames
+      const product_images = req.files["product_images"].map((file) => file.filename);
+  
       console.log(req.files);
       console.log(req.body);
   
@@ -30,7 +89,7 @@ module.exports = {
       const values = [
         seller_id,
         product_name,
-        JSON.parse(product_images), // Check if JSON parsing is necessary
+        JSON.stringify(product_images), // Assuming product_images is an array of images
         video_url,
         total_stocks_added,
         no_of_stocks_available,
@@ -56,8 +115,7 @@ module.exports = {
       console.error("Error processing request:", error);
       res.status(400).json({ error: "Bad Request", details: error.message });
     }
-  },
-  
+  },   
 
   // Get all products
   getAllProducts: (req, res) => {

@@ -59,7 +59,7 @@ CREATE TABLE `genealogy_tree` (
   KEY `descendant_id` (`descendant_id`),
   CONSTRAINT `genealogy_tree_ibfk_1` FOREIGN KEY (`ancestor_id`) REFERENCES `member` (`memb_id`),
   CONSTRAINT `genealogy_tree_ibfk_2` FOREIGN KEY (`descendant_id`) REFERENCES `member` (`memb_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -68,7 +68,7 @@ CREATE TABLE `genealogy_tree` (
 
 LOCK TABLES `genealogy_tree` WRITE;
 /*!40000 ALTER TABLE `genealogy_tree` DISABLE KEYS */;
-INSERT INTO `genealogy_tree` VALUES (1,14,24),(2,14,26),(3,14,27),(4,14,28),(5,14,29),(6,29,31);
+INSERT INTO `genealogy_tree` VALUES (1,14,24),(2,14,26),(3,14,27),(4,14,28),(5,14,29),(6,29,31),(7,31,32),(8,14,33);
 /*!40000 ALTER TABLE `genealogy_tree` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -101,7 +101,7 @@ CREATE TABLE `member` (
   UNIQUE KEY `aadhaar_no_UNIQUE` (`aadhaar_no`),
   KEY `parent_id` (`parent_id`),
   CONSTRAINT `member_ibfk_1` FOREIGN KEY (`parent_id`) REFERENCES `member` (`memb_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -110,7 +110,7 @@ CREATE TABLE `member` (
 
 LOCK TABLES `member` WRITE;
 /*!40000 ALTER TABLE `member` DISABLE KEYS */;
-INSERT INTO `member` VALUES (11,'Peter','Erode','peter@gmail.com','$2b$10$7wPg.c6Bz1OMPUgs8O64c.bsWGj2LXrGhsh6KDuui7/.bRPLU96aC','7894563210','Mony','789456123032145','Erode','IDIB1235',NULL,'98745632103214','636300',NULL),(14,'Mony','Erode','mony1@gmail.com','$2b$10$kiYbKpNGRXk9S8QKwb5emuSDuFxP8tHXCvKnRZ50lk1rjzDv6X59a','8523697410','Mony','789456123032146','Erode','IDIB1237',NULL,'987456321032144','636300',NULL),(15,'Hari','Salem','hari@gmail.com','$2b$10$8DAlqWa0PhsOKUajVAHm1OhoG1IXTxI4JFTFhlrd67spfAnFzi08K','7845120369','Mony','85236974102312','Salem','IDIB1237',NULL,'98745632103213','636501',NULL),(16,'Varun','Salem','varun@gmail.com','$2b$10$2IBhAJS6lscpPMFmWUY.6uFdO5SR7AwsAr.itynCNy04TRPpcx/we','7894561230','Mony','85236974102315','Salem','IDIB1237',NULL,'98745632103211','636502',NULL),(23,'Mani','Salem','mani@gmail.com','$2b$10$XuVjSeiqOtwNr6rU5uEDquneC58U.E128DFAJxJ73YdPPsvlwts5q','78963025410','Mony','85236974102318','Salem','IDIB1231',NULL,'98745632103216','636502',NULL),(24,'John Doe','123 Main Street','john.doe@example.com','securePassword123','9876543210','John Doe\'s Account','0123456789','City Branch','ABCD0123456','ABCDE1234F','1234-5678-9012','123456',14),(26,'John Doe','123 Main Street','john@example.com','securePassword123','9876542210','John Doe\'s Account','0123466789','City Branch','ABCD0133456','ABCDE3234F','1534-5678-9012','123456',14),(27,'John 1','123 Main Street','john1@example.com','securePassword123','9886642210','John Doe\'s Account','0122466789','City Branch','ABCD0133456','ABCD33234F','1554-5678-9012','123456',14),(28,'Vani','Salem','vani@gmail.com','$2b$10$1F5p1IIl0K6vdyXx/AmWFOpkm0OTyBaPprYT5fQjhmFExXQqXihVq','7456123980','Mony','85237974102314','Salem','IDIB1287','CTOPR4318T','98745732103214','636502',14),(29,'venu','Salem','venu@gmail.com','$2b$10$eIhMZMp/7MPJCxKovwz9Pu3.n0MJ6cr2cDAv9UTnHDmJx6i13ckBq','7893021452','Mony','85236954102314','Salem','IDIB5235','CTOPR3328T','98645632103214','636502',14),(31,'Karan','salem','karan@gmail.com','$2b$10$ITEC0weDNnSQDZ.Ia8mkWu3oAJCwoLV0P7iCuqoDwvGPo1phPYVM.','8712306541','Mony','3333222145698','Salem','IDIB1201','CTOPA4318T','945632103214','636502',29);
+INSERT INTO `member` VALUES (11,'Peter','Erode','peter@gmail.com','$2b$10$7wPg.c6Bz1OMPUgs8O64c.bsWGj2LXrGhsh6KDuui7/.bRPLU96aC','7894563210','Mony','789456123032145','Erode','IDIB1235',NULL,'98745632103214','636300',NULL),(14,'Mony','Erode','mony1@gmail.com','$2b$10$kiYbKpNGRXk9S8QKwb5emuSDuFxP8tHXCvKnRZ50lk1rjzDv6X59a','8523697410','Mony','789456123032146','Erode','IDIB1237',NULL,'987456321032144','636300',NULL),(15,'Hari','Salem','hari@gmail.com','$2b$10$8DAlqWa0PhsOKUajVAHm1OhoG1IXTxI4JFTFhlrd67spfAnFzi08K','7845120369','Mony','85236974102312','Salem','IDIB1237',NULL,'98745632103213','636501',NULL),(16,'Varun','Salem','varun@gmail.com','$2b$10$2IBhAJS6lscpPMFmWUY.6uFdO5SR7AwsAr.itynCNy04TRPpcx/we','7894561230','Mony','85236974102315','Salem','IDIB1237',NULL,'98745632103211','636502',NULL),(23,'Mani','Salem','mani@gmail.com','$2b$10$XuVjSeiqOtwNr6rU5uEDquneC58U.E128DFAJxJ73YdPPsvlwts5q','78963025410','Mony','85236974102318','Salem','IDIB1231',NULL,'98745632103216','636502',NULL),(24,'John Doe','123 Main Street','john.doe@example.com','securePassword123','9876543210','John Doe\'s Account','0123456789','City Branch','ABCD0123456','ABCDE1234F','1234-5678-9012','123456',14),(26,'John Doe','123 Main Street','john@example.com','securePassword123','9876542210','John Doe\'s Account','0123466789','City Branch','ABCD0133456','ABCDE3234F','1534-5678-9012','123456',14),(27,'John 1','123 Main Street','john1@example.com','securePassword123','9886642210','John Doe\'s Account','0122466789','City Branch','ABCD0133456','ABCD33234F','1554-5678-9012','123456',14),(28,'Vani','Salem','vani@gmail.com','$2b$10$1F5p1IIl0K6vdyXx/AmWFOpkm0OTyBaPprYT5fQjhmFExXQqXihVq','7456123980','Mony','85237974102314','Salem','IDIB1287','CTOPR4318T','98745732103214','636502',14),(29,'venu','Salem','venu@gmail.com','$2b$10$eIhMZMp/7MPJCxKovwz9Pu3.n0MJ6cr2cDAv9UTnHDmJx6i13ckBq','7893021452','Mony','85236954102314','Salem','IDIB5235','CTOPR3328T','98645632103214','636502',14),(31,'Karan','salem','karan@gmail.com','$2b$10$ITEC0weDNnSQDZ.Ia8mkWu3oAJCwoLV0P7iCuqoDwvGPo1phPYVM.','8712306541','Mony','3333222145698','Salem','IDIB1201','CTOPA4318T','945632103214','636502',29),(32,'Revathi','Salem','srevathisona@gmail.com','$2b$10$o7rFssJZDu6nZSw5vOyb7eL3QcRDLxQvu5Q8n1MV7oMrf8J2Kf8km','853674109','Mony','JD908765','Salem','IBDI9804F','BB45637','78963025419874','636502',31),(33,'sai','Salem','sai@gmail.com','$2b$10$6pQcP7TyQW6sl..8Y8SP2eIv1muNfoDSyqRIJ8ZaLNpRN4DJptXZG','34556666','Mony','85206974102314','Erode','IDIB235','CTOPR4318a','9874563210321344','636502',14);
 /*!40000 ALTER TABLE `member` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -216,7 +216,7 @@ CREATE TABLE `seller` (
   UNIQUE KEY `gst_no_UNIQUE` (`gst_no`),
   UNIQUE KEY `pancard_no_UNIQUE` (`pancard_no`),
   UNIQUE KEY `aadhaar_no_UNIQUE` (`aadhaar_no`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -225,7 +225,7 @@ CREATE TABLE `seller` (
 
 LOCK TABLES `seller` WRITE;
 /*!40000 ALTER TABLE `seller` DISABLE KEYS */;
-INSERT INTO `seller` VALUES (1,'Peter','salem','hello@gmail.com','$2b$10$a23u5ope6irOzbYyeOhtOe/CgYItvzlVxPYXrj67gk9nVCB/KumRi','77412589630','Mony','8521479630','Salem','INDI234','company_logo-1703161832474-547587988.png','Hcl Solutions','852369874',NULL,'23569874102358','698745'),(3,'Varun','Erode','varun@gmail.com','$2b$10$7U1X7vR7v0F6x9t2IhxE6uhpWxSkyFJPaNkHhFD5pMowC.R61Kg..','7894561230','Mony','3692581470123','Salem','INDU1123','company_logo-1703162447971-859984108.jpg','Tech Solutions','9632587410258',NULL,'321456987412563','636502'),(4,'Mani','South car street','mani@gmail.com','$2b$10$SRp80OkdJF/l2o7COVm26u7B2mj.NVuEmmOlH14fU/kW9kv3As3OC','8527419630','Mony','989451112223365','Salem','IDIB1254','company_logo-1703162793179-516302401.jpg','BPR Company','9988774411225563',NULL,'98741225663300122','636502');
+INSERT INTO `seller` VALUES (1,'Peter','salem','hello@gmail.com','$2b$10$a23u5ope6irOzbYyeOhtOe/CgYItvzlVxPYXrj67gk9nVCB/KumRi','77412589630','Mony','8521479630','Salem','INDI234','company_logo-1703161832474-547587988.png','Hcl Solutions','852369874',NULL,'23569874102358','698745'),(3,'Varun','Erode','varun@gmail.com','$2b$10$7U1X7vR7v0F6x9t2IhxE6uhpWxSkyFJPaNkHhFD5pMowC.R61Kg..','7894561230','Mony','3692581470123','Salem','INDU1123','company_logo-1703162447971-859984108.jpg','Tech Solutions','9632587410258',NULL,'321456987412563','636502'),(4,'Mani','South car street','mani@gmail.com','$2b$10$SRp80OkdJF/l2o7COVm26u7B2mj.NVuEmmOlH14fU/kW9kv3As3OC','8527419630','Mony','989451112223365','Salem','IDIB1254','company_logo-1703162793179-516302401.jpg','BPR Company','9988774411225563',NULL,'98741225663300122','636502'),(5,'Subash','Salem','subash@gmail.com','$2b$10$tKslDLAX3ijU2t65HBPMXOG1xLXuLvW5NQzCYSt.c74PVomFzYvie','0638105537','Mony','8523697102314','Salem','IDIB135','company_logo-1706939204138-988334106.png','Subash&Co','7845126902365',NULL,'9874632103216','636502'),(6,'Taj','Salem','taj@gmail.com','$2b$10$9WsbflmfmMx28.4ii488r.Zlp8Am8JKKurGmm9qej7Xm.uBLR.t/e','987120360540','taj','74125','dafff','fff455','company_logo-1707112637389-577442795.png','taj','fff45rr',NULL,'555555566666666','636502');
 /*!40000 ALTER TABLE `seller` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -238,4 +238,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-01-05 14:37:17
+-- Dump completed on 2024-02-05 11:38:18
